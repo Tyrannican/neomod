@@ -1,12 +1,11 @@
+mod state;
+mod ui;
+
 use std::path::PathBuf;
 
 use anyhow::Result;
 use ratatui::{
     backend::{Backend, CrosstermBackend},
-    layout::{Alignment, Constraint, Direction, Layout},
-    style::{Color, Style},
-    text::Text,
-    widgets::{Block, Borders, Paragraph},
     Terminal,
 };
 use serde::{Deserialize, Serialize};
@@ -42,34 +41,7 @@ fn shutdown() -> Result<()> {
 fn run_app<B: Backend>(terminal: &mut Terminal<B>, neomod: &mut Neomod) -> Result<()> {
     // Messing around with some Ratatui
     loop {
-        let _ = terminal.draw(|frame| {
-            let chunks = Layout::default()
-                .direction(Direction::Vertical)
-                .constraints([
-                    Constraint::Length(3),
-                    Constraint::Min(1),
-                    Constraint::Length(3),
-                ])
-                .split(frame.size());
-
-            let counter_block = Block::default()
-                .borders(Borders::ALL)
-                .style(Style::default());
-
-            let color = if neomod.counter >= 0 {
-                Color::Green
-            } else {
-                Color::Red
-            };
-            let counter = Paragraph::new(Text::styled(
-                format!("Counter: {}", neomod.counter),
-                Style::default().fg(color),
-            ))
-            .block(counter_block)
-            .alignment(Alignment::Center);
-
-            frame.render_widget(counter, chunks[0]);
-        });
+        let _ = terminal.draw(|frame| ui::render_ui(frame, neomod));
 
         if let Event::Key(key) = event::read()? {
             if key.kind == event::KeyEventKind::Release {
