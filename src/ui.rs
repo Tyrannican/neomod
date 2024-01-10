@@ -1,4 +1,4 @@
-use crate::Neomod;
+use crate::state::{ModeState, Neomod};
 
 use ratatui::prelude::*;
 use ratatui::widgets::{Block, Borders, Paragraph};
@@ -14,6 +14,26 @@ fn render_header(frame: &mut Frame, section: Rect, neomod: &mut Neomod) {
     ))
     .block(header_block)
     .alignment(Alignment::Center);
+    // let header_text = match neomod.mode_state {
+    //     ModeState::Main => Paragraph::new(Text::styled(
+    //         "Neomod\nA DIY WoW Addon Manager",
+    //         Style::default().fg(Color::LightBlue),
+    //     ))
+    //     .block(header_block)
+    //     .alignment(Alignment::Center),
+    //     ModeState::Edit => Paragraph::new(Text::styled(
+    //         "Neomod\nEditing Addon",
+    //         Style::default().fg(Color::LightGreen),
+    //     ))
+    //     .block(header_block)
+    //     .alignment(Alignment::Center),
+    //     ModeState::View => Paragraph::new(Text::styled(
+    //         "Neomod\nViewing some addon information",
+    //         Style::default().fg(Color::LightYellow),
+    //     ))
+    //     .block(header_block)
+    //     .alignment(Alignment::Center),
+    // };
 
     frame.render_widget(header_text, section);
 }
